@@ -1,0 +1,10 @@
+CREATE TABLE Aluno (
+  aluno_id NUMBER PRIMARY KEY,
+  nome VARCHAR2(100),
+  idade NUMBER
+);
+
+CREATE TABLE Disciplina (
+  disciplina_id NUMBER PRIMARY KEY,
+  nome VARCHAR2(100)
+);
