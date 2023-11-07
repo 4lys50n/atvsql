@@ -1,0 +1,35 @@
+CREATE OR REPLACE PACKAGE Package_Aluno_Disciplina AS
+
+  PROCEDURE ListarAlunos;
+
+  FUNCTION IncluirAlunoDisciplina(p_nome_aluno VARCHAR2, p_idade NUMBER, p_nome_disciplina VARCHAR2)
+    RETURN NUMBER;
+END Package_Aluno_Disciplina;
+/
+
+CREATE OR REPLACE PACKAGE BODY Package_Aluno_Disciplina AS
+
+  PROCEDURE ListarAlunos IS
+  BEGIN
+    FOR aluno_rec IN (SELECT aluno_id, nome, idade FROM Aluno) LOOP
+      DBMS_OUTPUT.PUT_LINE('Aluno ID: ' || aluno_rec.aluno_id || ', Nome: ' || aluno_rec.nome || ', Idade: ' || aluno_rec.idade);
+    END LOOP;
+  END ListarAlunos;
+
+  FUNCTION IncluirAlunoDisciplina(p_nome_aluno VARCHAR2, p_idade NUMBER, p_nome_disciplina VARCHAR2)
+    RETURN NUMBER IS
+    v_aluno_id NUMBER;
+    v_disciplina_id NUMBER;
+  BEGIN
+    INSERT INTO Aluno (nome, idade) VALUES (p_nome_aluno, p_idade)
+      RETURNING aluno_id INTO v_aluno_id;
+
+    INSERT INTO Disciplina (nome) VALUES (p_nome_disciplina)
+      RETURNING disciplina_id INTO v_disciplina_id;
+
+    COMMIT; 
+
+    RETURN v_aluno_id;
+  END IncluirAlunoDisciplina;
+END Package_Aluno_Disciplina;
+/
